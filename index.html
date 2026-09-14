@@ -91,6 +91,48 @@ async function agendar(){
 
  msg.innerHTML='✅ Horário agendado com sucesso!';
 }
+async function atualizarHorariosBloqueados() {
+  const dataSelecionada = document.getElementById("data").value;
+  const campoHora = document.getElementById("hora");
+
+  if (!dataSelecionada) return;
+
+  const { data: bloqueados, error } = await db
+    .from("blocked_slots")
+    .select("booking_time")
+    .eq("booking_date", dataSelecionada);
+
+  if (error) {
+    console.error("Erro ao consultar horários bloqueados:", error);
+    return;
+  }
+
+  const horariosBloqueados = (bloqueados || []).map(
+    item => String(item.booking_time).slice(0,5)
+  );
+
+  Array.from(campoHora.options).forEach(option => {
+    if (!option.value) return;
+
+    const bloqueado = horariosBloqueados.includes(option.value);
+
+    option.disabled = bloqueado;
+
+    const horario = option.value;
+
+    option.textContent = bloqueado
+      ? horario + " — INDISPONÍVEL"
+      : horario;
+  });
+
+  if (horariosBloqueados.includes(campoHora.value)) {
+    campoHora.value = "";
+  }
+}
+
+document
+  .getElementById("data")
+  .addEventListener("change", atualizarHorariosBloqueados);
 </script>
 </body>
 </html>
