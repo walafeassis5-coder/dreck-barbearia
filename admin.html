@@ -418,7 +418,30 @@ if (!agendaHoje.length) {
       👤 ${item.customer_name}<br>
       ✂️ ${item.service_name}<br>
       💰 R$ ${Number(item.price || 0).toFixed(2).replace(".", ",")}<br>
-      <span class="muted">Status: ${item.status}</span>
+    <span class="muted">
+  Status: ${
+    item.status === "confirmed"
+      ? "✅ Confirmado"
+      : "⏳ Pendente"
+  }
+</span>
+
+<div style="display:flex;gap:8px;margin-top:10px;">
+  <button
+    onclick="changeStatus('${item.id}','confirmed')"
+    style="flex:1;"
+  >
+    ✅ CONFIRMAR
+  </button>
+
+  <button
+    class="secondary"
+    onclick="changeStatus('${item.id}','cancelled')"
+    style="flex:1;"
+  >
+    ❌ CANCELAR
+  </button>
+</div>
     `;
 
     todayBox.appendChild(div);
