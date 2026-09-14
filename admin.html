@@ -150,12 +150,80 @@ button.cancel{
       <strong>Agenda DRECK</strong><br>
       <span class="muted">Agendamentos dos clientes</span>
     </div>
+    <div class="card">
+  <h2>📊 Resumo de hoje</h2>
 
+  <div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  ">
+
+    <div class="booking" style="text-align:center">
+      <div class="muted">Clientes hoje</div>
+      <div
+        id="todayClients"
+        class="gold"
+        style="font-size:30px;font-weight:bold;margin-top:8px"
+      >
+        0
+      </div>
+    </div>
+
+    <div class="booking" style="text-align:center">
+      <div class="muted">Faturamento hoje</div>
+      <div
+        id="todayRevenue"
+        class="gold"
+        style="font-size:24px;font-weight:bold;margin-top:8px"
+      >
+        R$ 0,00
+      </div>
+    </div>
+
+  </div>
+</div>
+  
     <button class="secondary" onclick="logout()">
       Sair
     </button>
   </div>
 
+  <div class="card">
+  <h2>📊 Resumo de hoje</h2>
+
+  <div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  ">
+
+    <div class="booking" style="text-align:center">
+      <div class="muted">Clientes hoje</div>
+      <div
+        id="todayClients"
+        class="gold"
+        style="font-size:30px;font-weight:bold;margin-top:8px"
+      >
+        0
+      </div>
+    </div>
+
+    <div class="booking" style="text-align:center">
+      <div class="muted">Faturamento hoje</div>
+      <div
+        id="todayRevenue"
+        class="gold"
+        style="font-size:24px;font-weight:bold;margin-top:8px"
+      >
+        R$ 0,00
+      </div>
+    </div>
+
+  </div>
+</div>
   <div class="card">
     <button onclick="loadBookings()">
       🔄 ATUALIZAR AGENDA
@@ -280,6 +348,28 @@ async function loadBookings(){
     return;
   }
 
+  const hoje = new Date().toISOString().split("T")[0];
+
+const agendamentosHoje = (data || []).filter(item =>
+  item.booking_date === hoje &&
+  item.status !== "cancelled"
+);
+
+const totalClientes = agendamentosHoje.length;
+
+const faturamentoHoje = agendamentosHoje.reduce(
+  (total, item) => total + Number(item.price || 0),
+  0
+);
+
+document.getElementById("todayClients").textContent =
+  totalClientes;
+
+document.getElementById("todayRevenue").textContent =
+  faturamentoHoje.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
   if(!data || data.length === 0){
     bookingsBox.innerHTML =
       '<div class="empty">Nenhum agendamento encontrado.</div>';
