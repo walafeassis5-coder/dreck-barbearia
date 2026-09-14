@@ -194,10 +194,12 @@ const horarioAtual =
   Array.from(campoHora.options).forEach(option => {
     if (!option.value) return;
 
-const horarioPassou =
-  dataSelecionada === hojeLocal &&
-  option.value <= horarioAtual;
+const dataEscolhidaObj = new Date(dataSelecionada + "T00:00:00");
+const hojeObj = new Date(hojeLocal + "T00:00:00");
 
+const horarioPassou =
+  dataEscolhidaObj.getTime() === hojeObj.getTime() &&
+  option.value <= horarioAtual;
 const indisponivel =
   horariosIndisponiveis.includes(option.value) ||
   horarioPassou;
