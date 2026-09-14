@@ -165,6 +165,28 @@ button.cancel{
   </div>
 
 </section>
+<div class="card">
+  <h2>🚫 Bloquear horário</h2>
+
+  <input id="blockDate" type="date">
+
+  <select id="blockTime">
+    <option value="">Escolha o horário</option>
+    <option value="10:00">10:00</option>
+    <option value="11:30">11:30</option>
+    <option value="13:00">13:00</option>
+    <option value="15:00">15:00</option>
+    <option value="17:30">17:30</option>
+    <option value="19:00">19:00</option>
+    <option value="20:00">20:00</option>
+  </select>
+
+  <button onclick="blockSlot()">
+    BLOQUEAR HORÁRIO
+  </button>
+
+  <div id="blockedSlots"></div>
+</div>
 
 </main>
 
@@ -233,6 +255,7 @@ async function logout(){
 }
 
 async function showDashboard(){
+await loadBlockedSlots();
 
   loginBox.style.display = "none";
   dashboard.style.display = "block";
@@ -335,7 +358,97 @@ async function changeStatus(id,status){
 
   await loadBookings();
 }
+async function blockSlot(){
 
+  const booking_date =
+    document.getElementById("blockDate").value;
+
+  const booking_time =
+    document.getElementById("blockTime").value;
+
+  if(!booking_date || !booking_time){
+    alert("Escolha a data e o horário.");
+    return;
+  }
+
+  const { error } = await db
+    .from("blocked_slots")
+    .insert({
+      booking_date,
+      booking_time
+    });
+
+  if(error){
+    alert("Erro ao bloquear: " + error.message);
+    return;
+  }
+
+  alert("Horário bloqueado com sucesso.");
+
+  await loadBlockedSlots();
+}
+
+async function loadBlockedSlots(){
+
+  const box =
+    document.getElementById("blockedSlots");
+
+  const { data, error } = await db
+    .from("blocked_slots")
+    .select("*")
+    .order("booking_date", { ascending:true })
+    .order("booking_time", { ascending:true });
+
+  if(error){
+    box.innerHTML =
+      "<p>Erro ao carregar horários bloqueados.</p>";
+    return;
+  }
+
+  if(!data || data.length === 0){
+    box.innerHTML =
+      '<p class="muted">Nenhum horário bloqueado.</p>';
+    return;
+  }
+
+  box.innerHTML = "<h3>Horários bloqueados</h3>";
+
+  data.forEach(item => {
+
+    const div = document.createElement("div");
+
+    div.className = "booking";
+
+    div.innerHTML = `
+      📅 ${formatDate(item.booking_date)}
+      • 🕐 ${String(item.booking_time).slice(0,5)}
+
+      <button
+        class="secondary"
+        onclick="unblockSlot('${item.id}')"
+      >
+        Liberar horário
+      </button>
+    `;
+
+    box.appendChild(div);
+  });
+}
+
+async function unblockSlot(id){
+
+  const { error } = await db
+    .from("blocked_slots")
+    .delete()
+    .eq("id", id);
+
+  if(error){
+    alert("Erro ao liberar horário: " + error.message);
+    return;
+  }
+
+  await loadBlockedSlots();
+}
 async function checkSession(){
 
   const {
