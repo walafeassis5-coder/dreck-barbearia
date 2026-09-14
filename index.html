@@ -89,10 +89,50 @@ async function agendar(){
   return;
  }
 
- msg.innerHTML='✅ Horário agendado com sucesso!';
+msg.innerHTML = `
+  <div style="
+    margin-top:18px;
+    padding:18px;
+    border:1px solid #c9a227;
+    border-radius:14px;
+    background:#111;
+    text-align:left;
+  ">
+    <div style="
+      color:#c9a227;
+      font-size:20px;
+      font-weight:bold;
+      margin-bottom:12px;
+      text-align:center;
+    ">
+      ✅ Agendamento realizado!
+    </div>
+
+    <div>✂️ <strong>Serviço:</strong> ${serv[0]}</div>
+    <div style="margin-top:8px">
+      📅 <strong>Data:</strong> ${data.split("-").reverse().join("/")}
+    </div>
+    <div style="margin-top:8px">
+      🕐 <strong>Horário:</strong> ${hora}
+    </div>
+    <div style="margin-top:8px">
+      💰 <strong>Valor:</strong> R$ ${Number(serv[1]).toFixed(2).replace(".", ",")}
+    </div>
+
+    <div style="
+      margin-top:14px;
+      text-align:center;
+      color:#aaa;
+      font-size:13px;
+    ">
+      Seu horário foi reservado na DRECK Barbearia.
+    </div>
+  </div>
+`;
 }
 async function atualizarHorariosBloqueados() {
-  const dataSelecionada = document.getElementById("data").value;
+  const dat
+  aSelecionada = document.getElementById("data").value;
   const campoHora = document.getElementById("hora");
 
   if (!dataSelecionada) return;
