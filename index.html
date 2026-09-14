@@ -127,7 +127,17 @@ msg.innerHTML = `
     ">
       Seu horário foi reservado na DRECK Barbearia.
     </div>
-    <a
+  </div>
+`;
+}
+
+async function atualizarHorariosBloqueados() {
+  const dataSelecionada = document.getElementById("data").value;
+  const campoHora = document.getElementById("hora");
+
+  if (!dataSelecionada) return;
+
+  const { data: indisponiveis, error } = await db.rpc(
     "get_unavailable_times",
     {
       p_booking_date: dataSelecionada
@@ -140,7 +150,7 @@ msg.innerHTML = `
   }
 
   const horariosIndisponiveis = (indisponiveis || []).map(
-    item => String(item.booking_time).slice(0,5)
+    item => String(item.booking_time).slice(0, 5)
   );
 
   Array.from(campoHora.options).forEach(option => {
@@ -162,7 +172,8 @@ msg.innerHTML = `
     campoHora.value = "";
   }
 }
-  .getElementById("data")
+  document
+.getElementById("data")
   .addEventListener("change", atualizarHorariosBloqueados);
 </script>
 </body>
