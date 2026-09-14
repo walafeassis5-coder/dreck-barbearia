@@ -97,40 +97,41 @@ async function atualizarHorariosBloqueados() {
 
   if (!dataSelecionada) return;
 
-  const { data: bloqueados, error } = await db
-    .from("blocked_slots")
-    .select("booking_time")
-    .eq("booking_date", dataSelecionada);
+  const { data: indisponiveis, error } = await db.rpc(
+    "get_unavailable_times",
+    {
+      p_booking_date: dataSelecionada
+    }
+  );
 
   if (error) {
-    console.error("Erro ao consultar horários bloqueados:", error);
+    console.error("Erro ao consultar horários indisponíveis:", error);
     return;
   }
 
-  const horariosBloqueados = (bloqueados || []).map(
+  const horariosIndisponiveis = (indisponiveis || []).map(
     item => String(item.booking_time).slice(0,5)
   );
 
   Array.from(campoHora.options).forEach(option => {
     if (!option.value) return;
 
-    const bloqueado = horariosBloqueados.includes(option.value);
+    const indisponivel =
+      horariosIndisponiveis.includes(option.value);
 
-    option.disabled = bloqueado;
+    option.disabled = indisponivel;
 
     const horario = option.value;
 
-    option.textContent = bloqueado
+    option.textContent = indisponivel
       ? horario + " — INDISPONÍVEL"
       : horario;
   });
 
-  if (horariosBloqueados.includes(campoHora.value)) {
+  if (horariosIndisponiveis.includes(campoHora.value)) {
     campoHora.value = "";
   }
 }
-
-document
   .getElementById("data")
   .addEventListener("change", atualizarHorariosBloqueados);
 </script>
