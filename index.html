@@ -40,7 +40,7 @@ button{margin-top:20px;background:#d6ad60;color:#080808;border:0;font-weight:bol
 </select>
 
 <label>Data</label>
-<input type="date" id="data">
+<input type="date" id="data" min="">
 
 <label>Horário</label>
 <select id="hora">
@@ -59,6 +59,13 @@ button{margin-top:20px;background:#d6ad60;color:#080808;border:0;font-weight:bol
 </main>
 
 <script>
+const hoje = new Date();
+const ano = hoje.getFullYear();
+const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+const dia = String(hoje.getDate()).padStart(2, "0");
+
+document.getElementById("data").min =
+  `${ano}-${mes}-${dia}`;
 const cfg=window.DRECK_SUPABASE;
 const db=supabase.createClient(cfg.url,cfg.anonKey);
 
