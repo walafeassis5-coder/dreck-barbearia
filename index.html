@@ -158,6 +158,12 @@ const horarioAtual =
   `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
 
   if (!dataSelecionada) return;
+  Array.from(campoHora.options).forEach(option => {
+  if (!option.value) return;
+
+  option.disabled = false;
+  option.textContent = option.value;
+});
   if (dataSelecionada < hojeLocal) {
   Array.from(campoHora.options).forEach(option => {
     if (!option.value) return;
