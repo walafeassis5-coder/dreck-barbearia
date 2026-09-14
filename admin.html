@@ -419,11 +419,15 @@ if (!agendaHoje.length) {
       ✂️ ${item.service_name}<br>
       💰 R$ ${Number(item.price || 0).toFixed(2).replace(".", ",")}<br>
     <span class="muted">
-  Status: ${
-    item.status === "confirmed"
-      ? "✅ Confirmado"
-      : "⏳ Pendente"
-  }
+  <span style="
+  display:inline-block;
+  margin-top:8px;
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:bold;
+  background:${item.status === "confirmed" ? "#163d25" : "#4a3b10"};
+">
+  ${item.status === "confirmed" ? "✅ CONFIRMADO" : "⏳ PENDENTE"}
 </span>
 
 <div style="display:flex;gap:8px;margin-top:10px;">
