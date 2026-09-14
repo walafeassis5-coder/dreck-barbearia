@@ -158,6 +158,16 @@ const horarioAtual =
   `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
 
   if (!dataSelecionada) return;
+  if (dataSelecionada < hojeLocal) {
+  Array.from(campoHora.options).forEach(option => {
+    if (!option.value) return;
+    option.disabled = true;
+    option.textContent = option.value + " — INDISPONÍVEL";
+  });
+
+  campoHora.value = "";
+  return;
+}
 
   const { data: indisponiveis, error } = await db.rpc(
     "get_unavailable_times",
