@@ -177,6 +177,38 @@ button.cancel{
 
   </div>
 </div>
+<div style="
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:8px;
+  margin-bottom:15px;
+">
+
+  <div class="booking" style="text-align:center">
+    <div class="muted">Pendentes</div>
+    <div id="todayPending" class="gold"
+         style="font-size:24px;font-weight:bold;margin-top:6px">
+      0
+    </div>
+  </div>
+
+  <div class="booking" style="text-align:center">
+    <div class="muted">Confirmados</div>
+    <div id="todayConfirmed" class="gold"
+         style="font-size:24px;font-weight:bold;margin-top:6px">
+      0
+    </div>
+  </div>
+
+  <div class="booking" style="text-align:center">
+    <div class="muted">Cancelados</div>
+    <div id="todayCancelled" class="gold"
+         style="font-size:24px;font-weight:bold;margin-top:6px">
+      0
+    </div>
+  </div>
+
+</div>
   <div class="card">
     <button onclick="loadBookings()">
       🔄 ATUALIZAR AGENDA
@@ -311,6 +343,29 @@ const agendamentosHoje = (data || []).filter(item =>
   item.status === "confirmed"
 );
 
+const pendentesHoje = (data || []).filter(item =>
+  item.booking_date === hoje &&
+  item.status === "pending"
+).length;
+
+const confirmadosHoje = (data || []).filter(item =>
+  item.booking_date === hoje &&
+  item.status === "confirmed"
+).length;
+
+const canceladosHoje = (data || []).filter(item =>
+  item.booking_date === hoje &&
+  item.status === "cancelled"
+).length;
+
+document.getElementById("todayPending").textContent =
+  pendentesHoje;
+
+document.getElementById("todayConfirmed").textContent =
+  confirmadosHoje;
+
+document.getElementById("todayCancelled").textContent =
+  canceladosHoje;
 const totalClientes = agendamentosHoje.length;
 
 const faturamentoHoje = agendamentosHoje.reduce(
