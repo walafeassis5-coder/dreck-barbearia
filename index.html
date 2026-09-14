@@ -164,7 +164,7 @@ const horarioAtual =
   option.disabled = false;
   option.textContent = option.value;
 });
-  if (dataSelecionada < hojeLocal) {
+  if (new Date(dataSelecionada + "T00:00:00") < new Date(hojeLocal + "T00:00:00")) {
   Array.from(campoHora.options).forEach(option => {
     if (!option.value) return;
     option.disabled = true;
