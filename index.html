@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRECK Barbearia</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:#0b0b0b;
+      color:#fff;
+      min-height:100vh;
+    }
+    .container{
+      width:min(100%,480px);
+      margin:auto;
+      padding:20px;
+    }
+    .hero{
+      text-align:center;
+      padding:34px 0 24px;
+    }
+    .logo{
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2px solid #c7a35b;
+      margin-bottom:18px;
+    }
+    h1{
+      font-size:38px;
+      letter-spacing:4px;
+      color:#d7b46a;
+    }
+    .subtitle{
+      margin-top:8px;
+      color:#aaa;
+      font-size:14px;
+    }
+    .card{
+      background:#151515;
+      border:1px solid #2b2b2b;
+      border-radius:18px;
+      padding:18px;
+      margin-top:18px;
+    }
+    .card h2{
+      color:#d7b46a;
+      margin-bottom:14px;
+      font-size:20px;
+    }
+    .service{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      padding:14px 0;
+      border-bottom:1px solid #2b2b2b;
+    }
+    .service:last-child{border-bottom:none}
+    .price{
+      color:#d7b46a;
+      font-weight:bold;
+      white-space:nowrap;
+    }
+    label{
+      display:block;
+      margin-top:12px;
+      margin-bottom:6px;
+      color:#bbb;
+      font-size:14px;
+    }
+    input,select,button{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #333;
+      background:#0f0f0f;
+      color:#fff;
+      font-size:16px;
+    }
+    button{
+      margin-top:16px;
+      background:#d7b46a;
+      color:#111;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    button:disabled{
+      opacity:.6;
+    }
+    .status{
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .muted{color:#999}
+    .success{color:#7de28a}
+    .error{color:#ff7878}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <section class="hero">
+    <h1>DRECK</h1>
+    <p class="subtitle">Barbearia • Desde 2019</p>
+  </section>
+
+  <section class="card">
+    <h2>Serviços</h2>
+    <div id="servicesList">
+      <p class="muted">Carregando serviços...</p>
+    </div>
+  </section>
