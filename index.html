@@ -1,121 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DRECK Barbearia</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
-
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:Arial,Helvetica,sans-serif;
-      background:#0b0b0b;
-      color:#fff;
-      min-height:100vh;
-    }
-    .container{
-      width:min(100%,480px);
-      margin:auto;
-      padding:20px;
-    }
-    .hero{
-      text-align:center;
-      padding:34px 0 24px;
-    }
-    .logo{
-      width:150px;
-      height:150px;
-      border-radius:50%;
-      object-fit:cover;
-      border:2px solid #c7a35b;
-      margin-bottom:18px;
-    }
-    h1{
-      font-size:38px;
-      letter-spacing:4px;
-      color:#d7b46a;
-    }
-    .subtitle{
-      margin-top:8px;
-      color:#aaa;
-      font-size:14px;
-    }
-    .card{
-      background:#151515;
-      border:1px solid #2b2b2b;
-      border-radius:18px;
-      padding:18px;
-      margin-top:18px;
-    }
-    .card h2{
-      color:#d7b46a;
-      margin-bottom:14px;
-      font-size:20px;
-    }
-    .service{
-      display:flex;
-      justify-content:space-between;
-      gap:15px;
-      padding:14px 0;
-      border-bottom:1px solid #2b2b2b;
-    }
-    .service:last-child{border-bottom:none}
-    .price{
-      color:#d7b46a;
-      font-weight:bold;
-      white-space:nowrap;
-    }
-    label{
-      display:block;
-      margin-top:12px;
-      margin-bottom:6px;
-      color:#bbb;
-      font-size:14px;
-    }
-    input,select,button{
-      width:100%;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #333;
-      background:#0f0f0f;
-      color:#fff;
-      font-size:16px;
-    }
-    button{
-      margin-top:16px;
-      background:#d7b46a;
-      color:#111;
-      border:none;
-      font-weight:bold;
-      cursor:pointer;
-    }
-    button:disabled{
-      opacity:.6;
-    }
-    .status{
-      margin-top:12px;
-      font-size:14px;
-      line-height:1.5;
-    }
-    .muted{color:#999}
-    .success{color:#7de28a}
-    .error{color:#ff7878}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DRECK Barbearia</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+body{margin:0;background:#090909;color:#fff;font-family:Arial,sans-serif}
+main{max-width:500px;margin:auto;padding:30px 20px}
+h1{font-size:45px;margin:20px 0 5px;color:#d6ad60}
+.sub{color:#aaa;margin-bottom:35px}
+.card{background:#151515;border:1px solid #332b1c;border-radius:18px;padding:20px;margin:15px 0}
+label{display:block;margin:15px 0 6px;color:#bbb}
+input,select,button{width:100%;padding:15px;border-radius:12px;border:1px solid #444;background:#111;color:white;font-size:16px;box-sizing:border-box}
+button{margin-top:20px;background:#d6ad60;color:#080808;border:0;font-weight:bold}
+.price{float:right;color:#d6ad60}
+#msg{margin-top:15px;line-height:1.5}
+</style>
 </head>
 <body>
-<div class="container">
+<main>
+<h1>DRECK</h1>
+<div class="sub">BARBEARIA • DESDE 2019</div>
 
-  <section class="hero">
-    <h1>DRECK</h1>
-    <p class="subtitle">Barbearia • Desde 2019</p>
-  </section>
+<div class="card">
+<h2>Agende seu horário</h2>
 
-  <section class="card">
-    <h2>Serviços</h2>
-    <div id="servicesList">
-      <p class="muted">Carregando serviços...</p>
-    </div>
-  </section>
+<label>Seu nome</label>
+<input id="nome" placeholder="Digite seu nome">
+
+<label>Serviço</label>
+<select id="servico">
+<option value="Corte masculino|35">Corte masculino — R$ 35</option>
+<option value="Barba|25">Barba — R$ 25</option>
+<option value="Corte + barba|55">Corte + barba — R$ 55</option>
+<option value="Pezinho|15">Pezinho — R$ 15</option>
+<option value="Sobrancelha|10">Sobrancelha — R$ 10</option>
+</select>
+
+<label>Data</label>
+<input type="date" id="data">
+
+<label>Horário</label>
+<select id="hora">
+<option>10:00</option>
+<option>11:30</option>
+<option>13:00</option>
+<option>15:00</option>
+<option>17:30</option>
+<option>19:00</option>
+<option>20:00</option>
+</select>
+
+<button onclick="agendar()">CONFIRMAR AGENDAMENTO</button>
+<div id="msg"></div>
+</div>
+</main>
+
+<script>
+const cfg=window.DRECK_SUPABASE;
+const db=supabase.createClient(cfg.url,cfg.anonKey);
+
+async function agendar(){
+ const nome=document.getElementById('nome').value.trim();
+ const serv=document.getElementById('servico').value.split('|');
+ const data=document.getElementById('data').value;
+ const hora=document.getElementById('hora').value;
+ const msg=document.getElementById('msg');
+
+ if(!nome||!data){
+  msg.innerHTML='⚠️ Preencha seu nome e a data.';
+  return;
+ }
+
+ msg.innerHTML='Agendando...';
+
+ const {data:r,error}=await db.rpc('create_booking',{
+  p_customer_name:nome,
+  p_service_name:serv[0],
+  p_price:Number(serv[1]),
+  p_booking_date:data,
+  p_booking_time:hora
+ });
+
+ if(error){
+  msg.innerHTML='❌ '+error.message;
+  return;
+ }
+
+ msg.innerHTML='✅ Horário agendado com sucesso!';
+}
+</script>
+</body>
+</html>
