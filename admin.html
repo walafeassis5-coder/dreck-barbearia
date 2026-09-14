@@ -210,6 +210,12 @@ button.cancel{
 
 </div>
   <div class="card">
+  <h2>📅 Agenda de hoje</h2>
+  <div id="todayBookings">
+    <p class="muted">Carregando agenda de hoje...</p>
+  </div>
+</div>
+<div class="card">
     <button onclick="loadBookings()">
       🔄 ATUALIZAR AGENDA
     </button>
@@ -381,6 +387,43 @@ document.getElementById("todayRevenue").textContent =
     style: "currency",
     currency: "BRL"
   });
+  const hojeLocal = new Date();
+
+const hojeAgenda =
+  `${hojeLocal.getFullYear()}-${String(hojeLocal.getMonth() + 1).padStart(2, "0")}-${String(hojeLocal.getDate()).padStart(2, "0")}`;
+
+const agendaHoje = (data || []).filter(item =>
+  item.booking_date === hojeAgenda &&
+  item.status !== "cancelled"
+);
+
+const todayBox = document.getElementById("todayBookings");
+
+if (!agendaHoje.length) {
+
+  todayBox.innerHTML =
+    '<p class="muted">Nenhum agendamento para hoje.</p>';
+
+} else {
+
+  todayBox.innerHTML = "";
+
+  agendaHoje.forEach(item => {
+
+    const div = document.createElement("div");
+    div.className = "booking";
+
+    div.innerHTML = `
+      <strong>🕐 ${String(item.booking_time).slice(0,5)}</strong><br>
+      👤 ${item.customer_name}<br>
+      ✂️ ${item.service_name}<br>
+      💰 R$ ${Number(item.price || 0).toFixed(2).replace(".", ",")}<br>
+      <span class="muted">Status: ${item.status}</span>
+    `;
+
+    todayBox.appendChild(div);
+  });
+}
   if(!data || data.length === 0){
     bookingsBox.innerHTML =
       '<div class="empty">Nenhum agendamento encontrado.</div>';
