@@ -137,6 +137,25 @@ msg.innerHTML = `
     ">
       Seu horário foi reservado na DRECK Barbearia.
     </div>
+    <div style="margin-top:20px;text-align:center;">
+  <strong style="color:#c9a227;font-size:18px;">
+    💳 Como deseja pagar?
+  </strong>
+
+  <div style="margin-top:14px;">
+    <button type="button" onclick="mostrarPix()"
+      style="width:100%;padding:14px;margin-bottom:10px;background:#c9a227;color:#111;border:0;border-radius:10px;font-weight:bold;">
+      💠 PAGAR AGORA VIA PIX
+    </button>
+
+    <button type="button" onclick="pagamentoPresencial()"
+      style="width:100%;padding:14px;background:#222;color:white;border:1px solid #c9a227;border-radius:10px;font-weight:bold;">
+      💵 PAGAR PRESENCIALMENTE
+    </button>
+  </div>
+
+  <div id="opcaoPagamento" style="margin-top:14px;"></div>
+</div>
     <a href="https://wa.me/5562992841305"
    target="_blank"
    style="
@@ -229,6 +248,60 @@ const indisponivel =
   document
 .getElementById("data")
   .addEventListener("change", atualizarHorariosBloqueados);
+function mostrarPix() {
+  const box = document.getElementById("opcaoPagamento");
+
+  box.innerHTML = `
+    <div style="padding:16px;border:1px solid #c9a227;border-radius:12px;background:#181818;">
+      <div style="color:#c9a227;font-weight:bold;font-size:18px;">
+        💠 PAGAMENTO VIA PIX
+      </div>
+
+      <div style="margin-top:12px;">
+        Chave PIX (Telefone):
+      </div>
+
+      <div style="font-size:20px;font-weight:bold;margin-top:6px;">
+        62992841305
+      </div>
+
+      <button type="button"
+        onclick="copiarPix()"
+        style="width:100%;padding:12px;margin-top:12px;background:#c9a227;color:#111;border:0;border-radius:10px;font-weight:bold;">
+        📋 COPIAR CHAVE PIX
+      </button>
+
+      <div style="margin-top:15px;font-size:14px;">
+        Após concluir o pagamento, envie o comprovante para o WhatsApp da DRECK.
+      </div>
+
+      <a href="https://wa.me/5562992841305?text=Olá!%20Realizei%20o%20pagamento%20via%20PIX%20do%20meu%20agendamento%20na%20DRECK.%20Segue%20o%20comprovante:"
+        target="_blank"
+        style="display:block;margin-top:12px;padding:13px;background:#25D366;color:white;text-decoration:none;border-radius:10px;font-weight:bold;">
+        💬 ENVIAR COMPROVANTE
+      </a>
+    </div>
+  `;
+}
+
+function pagamentoPresencial() {
+  const box = document.getElementById("opcaoPagamento");
+
+  box.innerHTML = `
+    <div style="padding:16px;border:1px solid #c9a227;border-radius:12px;background:#181818;">
+      <strong style="color:#c9a227;">💵 PAGAMENTO PRESENCIAL</strong>
+      <div style="margin-top:10px;">
+        Tudo certo! Seu agendamento está reservado.<br>
+        O pagamento será realizado presencialmente no dia do atendimento.
+      </div>
+    </div>
+  `;
+}
+
+function copiarPix() {
+  navigator.clipboard.writeText("62992841305");
+  alert("Chave PIX copiada!");
+}
 </script>
 </body>
 </html>
