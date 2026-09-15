@@ -29,6 +29,7 @@ button{margin-top:20px;background:#d6ad60;color:#080808;border:0;font-weight:bol
 
 <label>Seu nome</label>
 <input id="nome" placeholder="Digite seu nome">
+<input id="telefone" type="tel" placeholder="Seu WhatsApp (DDD + número)" inputmode="numeric">
 
 <label>Serviço</label>
 <select id="servico">
@@ -71,13 +72,14 @@ const db=supabase.createClient(cfg.url,cfg.anonKey);
 
 async function agendar(){
  const nome=document.getElementById('nome').value.trim();
+ const telefone=document.getElementById('telefone').value.trim();
  const serv=document.getElementById('servico').value.split('|');
  const data=document.getElementById('data').value;
  const hora=document.getElementById('hora').value;
  const msg=document.getElementById('msg');
 
- if(!nome||!data){
-  msg.innerHTML='⚠️ Preencha seu nome e a data.';
+ if(!nome||!telefone||!data){
+  msg.innerHTML='⚠️ Preencha seu nome, WhatsApp e a data.';
   return;
  }
 
@@ -85,6 +87,7 @@ async function agendar(){
 
  const {data:r,error}=await db.rpc('create_booking',{
   p_customer_name:nome,
+  p_customer_phone:telefone,
   p_service_name:serv[0],
   p_price:Number(serv[1]),
   p_booking_date:data,
