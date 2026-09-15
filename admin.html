@@ -414,6 +414,7 @@ if (!agendaHoje.length) {
     div.className = "booking";
 
     div.innerHTML = `
+    📱 ${item.customer_phone || "Sem WhatsApp"}<br>
       <strong>🕐 ${String(item.booking_time).slice(0,5)}</strong><br>
       👤 ${item.customer_name}<br>
       ✂️ ${item.service_name}<br>
@@ -446,6 +447,23 @@ if (!agendaHoje.length) {
     ❌ CANCELAR
   </button>
 </div>
+<a
+  href="https://wa.me/55${String(item.customer_phone || '').replace(/\D/g,'')}"
+  target="_blank"
+  style="
+    display:block;
+    margin-top:10px;
+    padding:12px;
+    background:#25D366;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:8px;
+  "
+>
+  💬 CHAMAR NO WHATSAPP
+</a>
     `;
 
     todayBox.appendChild(div);
