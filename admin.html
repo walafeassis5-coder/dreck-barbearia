@@ -448,7 +448,7 @@ if (!agendaHoje.length) {
   </button>
 </div>
 <a
-  href="https://wa.me/55${String(item.customer_phone || '').replace(/\D/g,'')}"
+  href="https://wa.me/${String(item.customer_phone || '').replace(/\D/g,'').replace(/^55/, '') ? '55' + String(item.customer_phone || '').replace(/\D/g,'').replace(/^55/, '') : ''}"
   target="_blank"
   style="
     display:block;
